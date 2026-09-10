@@ -26,7 +26,7 @@ export default function RoleRotator() {
 
   return (
     <span
-      className="relative inline-block h-7 min-w-[13ch] align-middle"
+      className="relative inline-block h-7 min-w-[20ch] align-middle"
       aria-hidden="true"
     >
       {PHRASES.map((phrase, i) => {

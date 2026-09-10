@@ -123,6 +123,10 @@ body {
   color: var(--color-text);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  /* Defensive: decorative blobs/bento tiles are sized in rem/ch, and a
+     future one that's slightly miscalculated on a narrow viewport should
+     never be able to force the whole page to scroll sideways. */
+  overflow-x: hidden;
 }
 
 h1,
