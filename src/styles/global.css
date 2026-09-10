@@ -129,6 +129,16 @@ body {
   overflow-x: hidden;
 }
 
+/* Dim the page behind the mobile nav dropdown while it's open, so the
+   menu reads as a clear overlay instead of blending into hero content
+   behind it. CSS-only (:has), no JS needed for something this simple. */
+body:has(header details[open]) main,
+body:has(header details[open]) footer {
+  opacity: 0.3;
+  pointer-events: none;
+  transition: opacity 150ms ease;
+}
+
 h1,
 h2,
 h3,
