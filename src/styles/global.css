@@ -1,0 +1,279 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------- */
+/* Design tokens — dark, never-pure-black base + a vibrant violet→pink→    */
+/* amber→cyan gradient system. Sans-first; mono is a small accent only.    */
+/* ---------------------------------------------------------------------- */
+@theme {
+  --font-sans: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo,
+    Consolas, "Liberation Mono", monospace;
+
+  --color-bg: #0b0a12;
+  --color-bg-alt: #100e1a;
+  --color-bg-alt-2: #150f1a;
+  --color-surface: #17141f;
+  --color-surface-2: #1e1a29;
+  --color-border: #2a2636;
+  --color-border-strong: #3d3750;
+
+  --color-text: #f4f2f8;
+  --color-text-dim: #b6b2c2;
+  --color-text-muted: #7c7788;
+
+  /* Gradient quartet — the "color that attracts people" system. Tuned
+     lighter/brighter (400-ish) than a light-mode palette would use, so
+     each hue actually glows against the dark surfaces instead of muddying. */
+  --color-violet: #a78bfa;
+  --color-pink: #f472b6;
+  --color-amber: #fbbf24;
+  --color-cyan: #22d3ee;
+
+  --gradient-brand: linear-gradient(100deg, var(--color-violet), var(--color-pink) 55%, var(--color-amber));
+
+  --animate-blink: blink 1s step-end infinite;
+  --animate-pulse-dot: pulse-dot 2s ease-in-out infinite;
+  --animate-dash: dash 1.2s linear infinite;
+  --animate-float-a: float-a 16s ease-in-out infinite;
+  --animate-float-b: float-b 20s ease-in-out infinite;
+  --animate-marquee: marquee 28s linear infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+@keyframes float-a {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -40px) scale(1.06);
+  }
+}
+
+@keyframes float-b {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-40px, 30px) scale(1.08);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Base                                                                    */
+/* ---------------------------------------------------------------------- */
+html {
+  color-scheme: dark;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-pink);
+  color: #17141f;
+}
+
+/* Static, unanimated film-grain texture for depth. A single tiled data-URI
+   noise pattern painted once and composited like any static background —
+   cheap, unlike an animated/blended full-page layer (see the perf note on
+   .blob below for why that distinction matters here). */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* Gradient text — the brand gradient clipped to text for headline emphasis. */
+.gradient-text {
+  background-image: var(--gradient-brand);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+/* Thin gradient rule, used as a section accent instead of a flat border. */
+.gradient-rule {
+  height: 1px;
+  background-image: var(--gradient-brand);
+  opacity: 0.5;
+}
+
+/* Soft blurred color blobs — purely decorative, confined to a section (not
+   a global fixed layer). Plain rgba + blur, no mix-blend-mode, animated
+   with transform only, so it composites once and stays cheap to scroll
+   past — mix-blend-mode + fixed positioning together is what caused real
+   scroll jank on an earlier pass of this site; transform-only avoids it. */
+.blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  pointer-events: none;
+}
+
+/* Elevated content surface. */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 1.25rem;
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+
+/* Opt-in colored glow on hover — pass the hue via --glow-color. */
+.card-glow:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--glow-color, var(--color-violet)) 45%, var(--color-border));
+  box-shadow: 0 16px 40px -18px color-mix(in srgb, var(--glow-color, var(--color-violet)) 55%, transparent);
+}
+
+/* Colored pill/chip, used for skills + project tags. Color is supplied via
+   the --chip-color custom property so one class works across the palette. */
+.chip {
+  --chip-color: var(--color-violet);
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--chip-color);
+  background: color-mix(in srgb, var(--chip-color) 16%, var(--color-bg));
+  border: 1px solid color-mix(in srgb, var(--chip-color) 40%, transparent);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.chip:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--chip-color) 55%, transparent);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 9999px;
+  padding: 0.65rem 1.4rem;
+  font-weight: 600;
+  color: #17141f;
+  background-image: var(--gradient-brand);
+  box-shadow: 0 8px 28px -8px color-mix(in srgb, var(--color-violet) 60%, transparent);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 32px -8px color-mix(in srgb, var(--color-pink) 65%, transparent);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: 9999px;
+  padding: 0.65rem 1.4rem;
+  font-weight: 600;
+  color: var(--color-text);
+  border: 1.5px solid var(--color-border-strong);
+  transition: border-color 150ms ease, color 150ms ease;
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-violet);
+  color: var(--color-violet);
+}
+
+/* Small uppercase section label with a gradient dot marker. */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-violet);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 9999px;
+  background: var(--gradient-brand);
+}
+
+/* Infinite marquee strip. Two copies of the same content sit side by side
+   in a flex row; the row translates exactly -50% (one copy's width) and
+   loops, so the seam is invisible. transform-only, pauses under
+   prefers-reduced-motion via the global rule above. */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}

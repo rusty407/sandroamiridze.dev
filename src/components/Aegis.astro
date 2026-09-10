@@ -1,0 +1,92 @@
+---
+import SessionLifecycleDiagram from "./react/SessionLifecycleDiagram";
+import { aegis } from "../data/site";
+
+const pillars = [
+  {
+    title: "Threat capture",
+    body: "Full-interaction SSH honeypot — attackers get a real-feeling shell, so you capture real tooling, real payloads, and real intent instead of scripted probes bouncing off a canned response.",
+    color: "var(--color-violet)",
+  },
+  {
+    title: "Isolation & containment",
+    body: "Every session gets its own OverlayFS layer and namespace. Nothing an attacker does can touch the host, the base image, or another session running concurrently.",
+    color: "var(--color-pink)",
+  },
+  {
+    title: "Telemetry pipeline",
+    body: "eBPF probes on execve, connect, and memfd_create stream structured syscall events over SSE to a live dashboard — no polling, no log tailing, no post-hoc parsing.",
+    color: "var(--color-amber)",
+  },
+  {
+    title: "Attacker behavior analysis",
+    body: "Session replay reconstructs exactly what a session did, in order — command history, network calls, and process creation — for after-the-fact analysis or write-ups.",
+    color: "var(--color-cyan)",
+  },
+];
+---
+
+<section id="aegis" class="relative overflow-hidden">
+  <div class="blob -right-32 top-1/4 h-96 w-96 bg-[var(--color-violet)]/15" aria-hidden="true"></div>
+
+  <div class="relative mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
+    <p class="eyebrow">Featured project</p>
+    <div class="mt-2 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+      <h2 class="text-2xl font-bold text-[var(--color-text)] sm:text-3xl">
+        {aegis.name}
+      </h2>
+      <a
+        href={aegis.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-sm font-semibold text-[var(--color-violet)] hover:underline"
+      >
+        github.com/rusty407/aegis-honeypot ↗
+      </a>
+    </div>
+    <p class="mt-2 max-w-2xl text-[var(--color-text-dim)]">{aegis.tagline}</p>
+
+    <div class="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-4">
+      {
+        pillars.map((pillar, i) => (
+          <div
+            class={`card card-glow border-t-4 p-5 ${
+              i === 0 ? "sm:col-span-2 sm:row-span-2" : i === 1 ? "sm:col-span-2" : "sm:col-span-1"
+            }`}
+            style={{ borderTopColor: pillar.color, "--glow-color": pillar.color }}
+          >
+            <h3 class="text-sm font-bold text-[var(--color-text)]">{pillar.title}</h3>
+            <p class="mt-2 text-sm text-[var(--color-text-dim)]">{pillar.body}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-10">
+      <h3 class="text-sm font-bold uppercase tracking-wide text-[var(--color-text-muted)]">
+        How it's different from Cowrie
+      </h3>
+      <p class="mt-3 max-w-3xl text-sm text-[var(--color-text-dim)]">
+        Cowrie emulates a shell in userspace — it's fast to deploy but attackers
+        are interacting with a simulation, and depth is limited to whatever
+        commands the emulator implements. Aegis takes a different approach:
+        real per-session isolation instead of emulation, and kernel-level
+        visibility instead of shell-level logging. eBPF sees every syscall a
+        session actually makes, including anything that escapes a naive shell
+        emulator entirely — memory-resident payloads via <code class="chip" style={{ "--chip-color": "var(--color-cyan)" }}>memfd_create</code>,
+        outbound C2 callbacks via <code class="chip" style={{ "--chip-color": "var(--color-cyan)" }}>connect</code>,
+        and process execution via <code class="chip" style={{ "--chip-color": "var(--color-cyan)" }}>execve</code>.
+        The tradeoff is deliberate: more infrastructure (OverlayFS, namespaces,
+        an eBPF loader) in exchange for ground-truth telemetry instead of an
+        emulator's best guess.
+      </p>
+    </div>
+
+    <div class="mt-10">
+      <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-[var(--color-text-muted)]">
+        Session lifecycle
+      </h3>
+      <SessionLifecycleDiagram client:visible />
+    </div>
+  </div>
+</section>

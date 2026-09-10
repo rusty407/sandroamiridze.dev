@@ -1,0 +1,38 @@
+---
+import type { Project } from "../data/site";
+
+interface Props {
+  project: Project;
+  color: string;
+}
+
+const { project, color } = Astro.props;
+---
+
+<article class="card card-glow group flex flex-col p-5" style={{ "--glow-color": color }}>
+  <div class="flex items-start justify-between gap-3">
+    <h3 class="text-base font-bold text-[var(--color-text)]">{project.name}</h3>
+    <a
+      href={project.href}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="shrink-0 text-xs font-semibold transition-colors group-hover:underline"
+      style={{ color }}
+      aria-label={`View ${project.name} on GitHub`}
+    >
+      GitHub ↗
+    </a>
+  </div>
+  <p class="mt-2 flex-1 text-sm text-[var(--color-text-dim)]">{project.description}</p>
+  <ul class="mt-4 flex flex-wrap gap-2">
+    {
+      project.tags.map((tag) => (
+        <li>
+          <span class="chip" style={{ "--chip-color": color }}>
+            {tag}
+          </span>
+        </li>
+      ))
+    }
+  </ul>
+</article>

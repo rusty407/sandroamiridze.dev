@@ -1,0 +1,52 @@
+---
+import { site } from "../data/site";
+
+const links = [
+  { label: "GitHub", value: `@${site.githubHandle}`, href: site.github, color: "var(--color-violet)" },
+  { label: "LinkedIn", value: site.linkedinHandle, href: site.linkedin, color: "var(--color-pink)" },
+  { label: "Email", value: site.email, href: `mailto:${site.email}`, color: "var(--color-amber)" },
+];
+---
+
+<footer id="contact" class="relative overflow-hidden border-t border-[var(--color-border)] bg-[var(--color-bg-alt)]">
+  <div class="blob left-1/2 top-0 h-96 w-[36rem] -translate-x-1/2 bg-[var(--color-violet)]/20" aria-hidden="true"></div>
+
+  <div class="relative mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
+    <p class="eyebrow">Contact</p>
+    <h2 class="mt-2 text-2xl font-bold text-[var(--color-text)] sm:text-3xl">
+      Let's <span class="gradient-text">get in touch</span>
+    </h2>
+    <p class="mt-3 max-w-xl text-[var(--color-text-dim)]">
+      Open to security engineering roles and collaboration on offensive/defensive
+      tooling. Reach out on any of these.
+    </p>
+
+    <ul class="mt-8 grid gap-4 sm:grid-cols-3">
+      {
+        links.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              target={link.href.startsWith("http") ? "_blank" : undefined}
+              rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+              class="card card-glow block p-4"
+              style={{ "--glow-color": link.color }}
+            >
+              <span class="block text-[11px] font-bold uppercase tracking-wide text-[var(--color-text-muted)]">
+                {link.label}
+              </span>
+              <span class="mt-1 block break-all text-sm font-bold" style={{ color: link.color }}>
+                {link.value}
+              </span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="mt-12 text-xs text-[var(--color-text-muted)]">
+      &copy; {new Date().getFullYear()} {site.name}. Built with Astro, React
+      islands, and Tailwind CSS.
+    </p>
+  </div>
+</footer>

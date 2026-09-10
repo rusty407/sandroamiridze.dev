@@ -1,0 +1,25 @@
+---
+import ProjectCard from "./ProjectCard.astro";
+import { otherProjects } from "../data/site";
+
+const palette = ["var(--color-violet)", "var(--color-pink)", "var(--color-amber)", "var(--color-cyan)"];
+---
+
+<section id="projects" class="relative overflow-hidden bg-[var(--color-bg-alt-2)]">
+  <div class="blob -left-24 bottom-0 h-72 w-72 bg-[var(--color-pink)]/12" aria-hidden="true"></div>
+
+  <div class="relative mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
+    <p class="eyebrow">Other projects</p>
+    <h2 class="mt-2 text-2xl font-bold text-[var(--color-text)] sm:text-3xl">
+      More from the toolbox
+    </h2>
+    <p class="mt-3 max-w-2xl text-[var(--color-text-dim)]">
+      Smaller builds that back up the fundamentals — offensive tooling and
+      low-level systems work outside the honeypot.
+    </p>
+
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {otherProjects.map((project, i) => <ProjectCard project={project} color={palette[i % palette.length]} />)}
+    </div>
+  </div>
+</section>

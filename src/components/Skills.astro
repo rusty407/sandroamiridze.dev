@@ -1,0 +1,72 @@
+---
+type SkillGroup = {
+  label: string;
+  color: string;
+  blurb?: string;
+  items: string[];
+};
+
+const groups: SkillGroup[] = [
+  {
+    label: "Detection & Monitoring",
+    color: "var(--color-violet)",
+    blurb: "Where most of my time actually goes — watching, correlating, and figuring out what an attacker just did.",
+    items: ["Wazuh (SIEM)", "Log Analysis", "Threat Detection", "Honeypots", "Incident Investigation", "TryHackMe Labs"],
+  },
+  {
+    label: "Offensive Tooling & Recon",
+    color: "var(--color-pink)",
+    items: ["Nmap", "Wireshark", "Metasploit", "Proxychains / Tor", "Network Enumeration", "Vulnerability Scanning"],
+  },
+  {
+    label: "Systems & Internals",
+    color: "var(--color-amber)",
+    items: ["Linux (Arch, Kali, BlackArch)", "Rust", "C / C++", "eBPF", "TCP/IP Networking", "Bash / Python"],
+  },
+  {
+    label: "Platform, Cloud & Certs",
+    color: "var(--color-cyan)",
+    items: ["OPNsense Firewall", "VirtualBox / Hyper-V", "AWS", "Google Cloud", "Splunk", "CompTIA CySA+"],
+  },
+];
+---
+
+<section id="skills" class="bg-[var(--color-bg-alt)]">
+  <div class="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
+    <p class="eyebrow">Focus</p>
+    <h2 class="mt-2 text-2xl font-bold text-[var(--color-text)] sm:text-3xl">
+      Security-first, systems-deep
+    </h2>
+    <p class="mt-3 max-w-2xl text-[var(--color-text-dim)]">
+      The tools and disciplines I actually reach for — capturing attacker
+      behavior, containing it safely, and understanding what's happening
+      underneath the OS while I do it.
+    </p>
+
+    <div class="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-4">
+      {
+        groups.map((group, i) => (
+          <div
+            class={`card p-5 transition-colors hover:border-[var(--color-border-strong)] ${
+              i === 0 ? "sm:col-span-2 sm:row-span-2" : i === 1 ? "sm:col-span-2" : "sm:col-span-1"
+            }`}
+          >
+            <h3 class="text-sm font-bold" style={{ color: group.color }}>
+              {group.label}
+            </h3>
+            {group.blurb && <p class="mt-2 text-sm text-[var(--color-text-dim)]">{group.blurb}</p>}
+            <ul class="mt-3 flex flex-wrap gap-2">
+              {group.items.map((item) => (
+                <li>
+                  <span class="chip" style={{ "--chip-color": group.color }}>
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

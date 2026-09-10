@@ -1,0 +1,54 @@
+---
+import { site } from "../data/site";
+
+const facts = [
+  { label: "Location", value: site.location, color: "var(--color-violet)" },
+  { label: "Focus", value: "Detection & Honeypots", color: "var(--color-pink)" },
+  { label: "Setup", value: "Arch Linux + Hyprland", color: "var(--color-amber)" },
+  { label: "Currently", value: "Per Scholas Cybersecurity — grad. June 2026", color: "var(--color-cyan)" },
+];
+---
+
+<section id="about" class="relative overflow-hidden">
+  <div class="mx-auto max-w-5xl px-4 py-16 sm:px-6 sm:py-20">
+    <p class="eyebrow">About</p>
+    <h2 class="mt-2 text-2xl font-bold text-[var(--color-text)] sm:text-3xl">A bit about me</h2>
+
+    <div class="mt-8 grid gap-8 lg:grid-cols-[1.4fr_1fr] lg:items-start">
+      <div class="max-w-2xl space-y-4 text-[var(--color-text-dim)]">
+        <p>
+          I'm drawn to the defender's side of security that still gets to think
+          like an attacker — honeypots, telemetry, and containment systems that
+          turn "someone broke in" into a dataset instead of an incident report.
+          Most of my time goes into understanding attacker behavior closely
+          enough to build tooling around it, in{" "}
+          <span class="font-semibold" style={{ color: "var(--color-violet)" }}>Rust</span> and{" "}
+          <span class="font-semibold" style={{ color: "var(--color-pink)" }}>C</span> where the
+          kernel-level details actually matter.
+        </p>
+        <p>
+          Day-to-day I run{" "}
+          <span class="font-semibold text-[var(--color-text)]">Arch Linux</span> with a{" "}
+          <span class="font-semibold text-[var(--color-text)]">Hyprland</span> setup tuned for
+          a fast, keyboard-first workflow.
+        </p>
+      </div>
+
+      <dl class="card divide-y divide-[var(--color-border)] p-2">
+        {
+          facts.map((fact) => (
+            <div class="flex items-start gap-3 px-3 py-3">
+              <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full" style={{ background: fact.color }} />
+              <div>
+                <dt class="text-[11px] font-bold uppercase tracking-wide text-[var(--color-text-muted)]">
+                  {fact.label}
+                </dt>
+                <dd class="text-sm font-medium text-[var(--color-text)]">{fact.value}</dd>
+              </div>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>
